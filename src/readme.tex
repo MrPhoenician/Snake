@@ -1,0 +1,67 @@
+\documentclass[10pt, oneside]{beamer}
+
+\begin{document}
+    \title{BrickGame ver 2.0}
+    \author{by harkonex}
+    \date{13.01.2025}
+    \begin{frame}
+        \titlepage
+    \end{frame}
+
+%    \setbeamercolor{itemize item}{fg=black} % черные треугольники
+    \setbeamertemplate{itemize items}{\textbullet}% отключает синие треугольники
+
+    \begin{frame}
+        BrickGame is a popular handheld console from the 90s with several thousands of built-in games developed in China.
+        It was originally a copy of Tetris developed in the USSR and released by Nintendo as part of the GameBoy
+        platform, but also included many other games that were added over time. The console had a small screen with a
+        10x20 playing field that was a matrix of "pixels". To the right of the field was a scoreboard with a digital
+        display of the current game status, records, and other additional information. The most popular games on
+        BrickGame were Tetris, Tanks, Racing, Frogger and Snake.
+    \end{frame}
+
+    \begin{frame}
+        Snake.
+        The player controls a snake that moves forward continuously. The player changes the direction of the snake by
+        using the arrows. The goal of the game is to collect "apples" that appear on the playing field. The player must
+        avoid hitting the walls of the playing field. After "eating" the next "apple", the length of the snake increases
+        by one. The player wins when the snake reaches the maximum size (200 "pixels"). If the snake hits a boundary of
+        the playing field, the player loses.
+        The game was based on another game called Blockage. It had two players controlling characters that left a trail
+        that you couldn't run into. The player who lasted the longest won. In 1977, Atari released Worm, which was now a
+        single player game. The most popular version of the game is probably the 1997 version released by the Swedish
+        company Nokia for their Nokia 6110 phone, developed by Taneli Armanto.
+    \end{frame}
+
+    \begin{frame}
+        \color{blue} To install use the following commands:
+        \begin{itemize}
+            \item make install - program installation
+            \item make uninstall - program uninstallation
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}
+        \color{blue} To control use the following keys:
+        \begin{itemize}
+            \item S - Start game;
+            \item Q - End game;
+            \item P - Pause;
+            \item Left arrow - move to the left;
+            \item Right arrow - move to the right;
+            \item Down arrow - move to the down;
+            \item Up arrow - move to the up;
+            \item Space - acceleration;
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}
+        \color{blue} Points are awarded as follows:
+        \begin{itemize}
+            \item 1 apple = +1 point;
+            \item 5 points = +1 lvl;
+            \item 1 lvl = +1 speed;
+        \end{itemize}
+    \end{frame}
+
+\end{document}
