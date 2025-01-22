@@ -131,3 +131,5 @@ Makefile.old
 dkms.conf
 /src/gui/desktop/build/
 /src/gui/desktop/.gitignore
+/cmake-build-debug/
+/src/report/
