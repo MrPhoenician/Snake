@@ -1,3 +1,0 @@
-/home/rami/CPP3_BrickGame_v2.0-1/cmake-build-debug/CMakeFiles/CPP3_BrickGame_v2_0_1.dir
-/home/rami/CPP3_BrickGame_v2.0-1/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/rami/CPP3_BrickGame_v2.0-1/cmake-build-debug/CMakeFiles/rebuild_cache.dir

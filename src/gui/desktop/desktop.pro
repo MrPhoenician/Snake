@@ -16,7 +16,6 @@ SOURCES += \
 HEADERS += \
     widget.h \
     ../../brick_game/api.h \
-    ../../brick_game/defines.h \
     ../../brick_game/tetris/tetris.h
 } else {
 TARGET = snake_desk
@@ -29,7 +28,6 @@ SOURCES += \
 HEADERS += \
     widget.h \
     ../../brick_game/api.h \
-    ../../brick_game/defines.h \
     ../../brick_game/snake/snake.h
 }
 

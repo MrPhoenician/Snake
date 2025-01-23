@@ -322,11 +322,11 @@ GameInfo_t updateCurrentState() {
     }
   }
 
-  if (game->user_act_mod == NoAction) {
+  if (game->user_act_mod == 8) {
     sigact(8);
   }
 
-  game->user_act_mod = NoAction;
+  game->user_act_mod = 8;
 
   return game->stats;
 }
@@ -364,7 +364,7 @@ void userInput(UserAction_t action, bool hold) {
 
   if (action >= 0 && action < 8) {
     sigact(action);
-    game->user_act_mod = (UserActionExtra_t)action;
+    game->user_act_mod = (int)action;
   }
 }
 

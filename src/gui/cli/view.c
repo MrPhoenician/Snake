@@ -1,7 +1,5 @@
 #include "view.h"
 
-#include "../../brick_game/defines.h"
-
 int main() {
   int error = EXIT_SUCCESS;
 

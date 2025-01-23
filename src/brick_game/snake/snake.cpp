@@ -78,6 +78,7 @@ void userInput(UserAction_t action, [[maybe_unused]] bool hold) {
   if (action >= 0 && action < 8) {
     game->sigact(action);
     game->userAct = action;
+    game->userActMod = action;
   }
 }
 
@@ -102,16 +103,11 @@ GameInfo_t updateCurrentState() {
     }
   }
 
-  if (game->stats.score > game->stats.high_score) {
-    game->stats.high_score = game->stats.score;
-    game->write_to_file();
-  }
-
-  if (game->userActMod == ExtraAction::NoAction) {
+  if (game->userActMod == 8) {
     game->sigact(8);
   }
 
-  game->userActMod = ExtraAction::NoAction;
+  game->userActMod = 8;
 
   return game->stats;
 }
@@ -326,6 +322,11 @@ void Snake::eating() {
     game->setLevelAndSpeed();
   }
 
+  if (game->stats.score > game->stats.high_score) {
+    game->stats.high_score = game->stats.score;
+    game->write_to_file();
+  }
+
   if (this->length == 200) {
     game->state = Gameover;
     game->winFlag = true;
@@ -343,7 +344,7 @@ void Game::setLevelAndSpeed() {
 }
 
 Game::Game() {
-  userActMod = ExtraAction::Start;
+  userActMod = 0;
   stats.field = nullptr;
   stats.next = nullptr;
   state = Start_state;

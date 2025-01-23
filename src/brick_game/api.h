@@ -1,6 +1,9 @@
 #ifndef API_H
 #define API_H
 
+#define BOARD_N 20  // field length / rows
+#define BOARD_M 10  // field width
+
 typedef struct {
   int **field;  // игровое поле
   int **next;   // следующая фигура

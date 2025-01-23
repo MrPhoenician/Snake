@@ -8,5 +8,7 @@ int main(int argc, char *argv[]) {
   w.setStyleSheet("background-color: lightGrey;");
   w.show();
 
+  //ToDo вынести контроллер из класса
+
   return a.exec();
 }

@@ -8,7 +8,6 @@
 #include <vector>
 
 #include "../api.h"
-#include "../defines.h"
 
 using namespace std::chrono;
 
@@ -26,20 +25,6 @@ typedef struct {
   int x;
   int y;
 } Coordinate;
-
-namespace ExtraAction {
-typedef enum {
-  Start,
-  Pause,
-  Terminate,
-  Left,
-  Right,
-  Up,
-  Down,
-  Action,
-  NoAction
-} UserAction_t;
-}
 
 namespace s21 {
 
@@ -82,7 +67,6 @@ class Game {
 
   GameInfo_t stats;
   UserAction_t userAct;
-  ExtraAction::UserAction_t userActMod;
   GameState_t state;
   bool winFlag;
   bool loseFlag;
@@ -90,6 +74,7 @@ class Game {
   Apple apple;
   int speed;
   int maxSpeed;
+  int userActMod;
   static Game *getGameObj();
   long my_timer();
   void setLevelAndSpeed();

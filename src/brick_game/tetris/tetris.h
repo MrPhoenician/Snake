@@ -1,6 +1,8 @@
 #ifndef C7_BRICKGAME_V1_0_1_BACKEND_H
 #define C7_BRICKGAME_V1_0_1_BACKEND_H
 
+#define LEVEL_CNT 10
+
 #include <curses.h>
 #include <ncurses.h>
 #include <stdbool.h>
@@ -8,7 +10,6 @@
 #include <time.h>
 
 #include "../api.h"
-#include "../defines.h"
 
 typedef struct {
   int x;
@@ -29,18 +30,6 @@ typedef enum {
   Pause_state
 } GameState_t;
 
-typedef enum {
-  StartExtra,
-  PauseExtra,
-  TerminateExtra,
-  LeftExtra,
-  RightExtra,
-  UpExtra,
-  DownExtra,
-  ActionExtra,
-  NoAction
-} UserActionExtra_t;
-
 typedef struct {
   struct timeval mt1, mt2;
   long long tt;
@@ -52,7 +41,6 @@ typedef struct {
   int **additional_field;
   GameState_t state;
   UserAction_t user_act;
-  UserActionExtra_t user_act_mod;
   GameInfo_t stats;
   Figure_pos_t figure_pos;
   Timer_t timer;
@@ -60,6 +48,7 @@ typedef struct {
   bool break_flag;
   int init_flag;
   int no_action_flag;
+  int user_act_mod;
 } Game_t;
 
 int allocate_matrix(int ***matrix, int rows, int columns);

@@ -2,14 +2,12 @@
 #define WIDGET_H
 
 #include <QKeyEvent>
-// #include <QLabel>
 #include <QLineEdit>
 #include <QPainter>
 #include <QPushButton>
 #include <QWidget>
 
 #include "../../brick_game/api.h"
-#include "../../brick_game/defines.h"
 #define DELAY 20
 #define SIZE_CELL 30
 
