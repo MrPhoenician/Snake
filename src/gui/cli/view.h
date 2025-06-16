@@ -3,7 +3,7 @@
 
 #define BOARDS_BEGIN 2
 #define MVPRINTW(y, x, ...) \
-mvprintw(BOARDS_BEGIN + (y), BOARDS_BEGIN + (x), __VA_ARGS__)
+  mvprintw(BOARDS_BEGIN + (y), BOARDS_BEGIN + (x), __VA_ARGS__)
 #define MVADDCH(y, x, c) mvaddch(BOARDS_BEGIN + (y), BOARDS_BEGIN + (x), c)
 #define HUD_WIDTH 12
 #define EXIT_Q 113

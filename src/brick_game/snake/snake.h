@@ -39,7 +39,7 @@ class Apple {
     coor.y = y;
     coor.x = x;
   }
-  void generate_apple();
+  void generateApple();
 
  private:
   Coordinate coor;
@@ -47,16 +47,16 @@ class Apple {
 
 class Snake {
  public:
-  Snake() { init_snake(); }
+  Snake() { initSnake(); }
 
   std::vector<std::pair<int, int>> field;
   UserAction_t direction;
   int length;
 
-  void init_snake();
-  void add_snake_head();
+  void initSnake();
+  void addSnakeHead();
   void eating();
-  void check_direction() const;
+  void checkDirection() const;
 
  private:
 };
@@ -64,7 +64,16 @@ class Snake {
 class Game {
  public:
   Game();
-
+  static Game *getGameObj();
+  long myTimer();
+  void setLevelAndSpeed();
+  void sigact(int action);
+  void writeToFile() const;
+  void allocateMatr();
+  void fillField();
+  [[nodiscard]] int getField(int y, int x) const { return stats.field[y][x]; }
+  void setField(int y, int x, int value) const { stats.field[y][x] = value; }
+  static void destroyGameObj();
   GameInfo_t stats;
   UserAction_t userAct;
   GameState_t state;
@@ -75,20 +84,8 @@ class Game {
   int speed;
   int maxSpeed;
   int userActMod;
-  static Game *getGameObj();
-  long my_timer();
-  void setLevelAndSpeed();
-  void sigact(int action);
-  void write_to_file() const;
-  void allocate_matr();
-  void fill_field();
-  [[nodiscard]] int getField(int y, int x) const { return stats.field[y][x]; }
-  void setField(int y, int x, int value) const { stats.field[y][x] = value; }
 
-  ~Game() {
-    delete gameObj;
-    gameObj = nullptr;
-  }
+  ~Game() = default;
 
  private:
   static Game *gameObj;
@@ -100,12 +97,12 @@ class Game {
   void gameover();
   void exitstate();
   void pause();
-  void generate_lose() const;
-  void generate_win() const;
-  void set_zero() const;
-  void free_field();
-  void read_from_file();
-  int check_collide();
+  void generateLose() const;
+  void generateWin() const;
+  void setZero() const;
+  void freeField();
+  void readFromFile();
+  int checkCollide();
 };
 
 }  // namespace s21
