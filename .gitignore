@@ -133,3 +133,4 @@ dkms.conf
 /src/gui/desktop/.gitignore
 /cmake-build-debug/
 /src/report/
+/.idea/
