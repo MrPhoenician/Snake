@@ -23,8 +23,8 @@ void Widget::paintEvent(QPaintEvent *paint) {
 }
 
 void Widget::resizeEvent(QResizeEvent *event) {
-  const int initialWidth = 550;
-  const int initialHeight = 670;
+  constexpr int initialWidth = 550;
+  constexpr int initialHeight = 670;
   // текущий размер делим на начальный
   scaleX = static_cast<double>(width()) / initialWidth;
   scaleY = static_cast<double>(height()) / initialHeight;
@@ -36,9 +36,7 @@ void Widget::resizeEvent(QResizeEvent *event) {
 }
 
 void Widget::keyPressEvent(QKeyEvent *event) {
-  int key = event->key();
-
-  if (key == Qt::Key_Up)
+  if (int key = event->key(); key == Qt::Key_Up)
     userInput(Up, false);
   else if (key == Qt::Key_Down)
     userInput(Down, false);
@@ -95,8 +93,8 @@ void Widget::drawing() {
 }
 
 void Widget::drawing_text(QPainter *p, GameInfo_t const *game) const {
-  QFont verdanaFont("Verdana",
-                    std::min(static_cast<int>(14 * scaleX * scaleY), 26));
+  const QFont verdanaFont("Verdana",
+                          std::min(static_cast<int>(14 * scaleX * scaleY), 26));
   p->setFont(verdanaFont);
   p->drawText(390 * scaleX + xOffset, 100 * scaleY + yOffset, "LEVEL");
   auto text = QString::number(game->level);
@@ -105,7 +103,7 @@ void Widget::drawing_text(QPainter *p, GameInfo_t const *game) const {
   text = QString::number(game->score);
   p->drawText(480 * scaleX + xOffset, 180 * scaleY + yOffset, text);
   p->drawText(390 * scaleX + xOffset, 260 * scaleY + yOffset, "HIGH");
-  double verticalSpacing = 6 * scaleY * scaleX;
+  const double verticalSpacing = 6 * scaleY * scaleX;
   p->drawText(390 * scaleX + xOffset, 280 * scaleY + yOffset + verticalSpacing,
               "SCORE");
   text = QString::number(game->high_score);

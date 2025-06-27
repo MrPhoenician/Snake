@@ -4,7 +4,7 @@ CC := gcc
 CXX := g++
 CFLAGS := -std=c11 -Wall -Wextra -Werror
 CXXFLAGS := -std=c++17 -Wall -Wextra -Werror
-OBJS := out/view.o out/snake.o
+OBJS := out/view.o out/Snake.o out/Apple.o out/Game.o
 OBJS_C := out/view_c.o out/tetris.o
 GCOV := --coverage
 T1 := snake_cli

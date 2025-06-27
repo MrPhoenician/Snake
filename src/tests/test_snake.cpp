@@ -3,7 +3,7 @@
 using namespace s21;
 
 TEST(test_snake, snake_1) {
-  auto gameObj = Game::getGameObj();
+  const auto gameObj = Game::getGameObj();
   auto game = updateCurrentState();
   gameObj->userAct = Start;
   userInput(gameObj->userAct, false);
@@ -23,11 +23,13 @@ TEST(test_snake, snake_1) {
   game = updateCurrentState();
   gameObj->userAct = Right;
   game = updateCurrentState();
-  gameObj->apple.generate_apple();
+  auto [y, x] = Apple::generateApple();
+  gameObj->apple.setCoor(y, x);
+  gameObj->setField(y, x, 1);
   gameObj->stats.score = 4;
-  gameObj->snake.eating();
-  gameObj->snake.length = 199;
-  gameObj->snake.eating();
+  gameObj->eating();
+  gameObj->snake.setLength(199);
+  gameObj->eating();
   gameObj->state = Gameover;
   gameObj->loseFlag = true;
   game = updateCurrentState();
@@ -43,7 +45,7 @@ TEST(test_snake, snake_1) {
 }
 
 TEST(test_snake, snake_2) {
-  auto gameObj = Game::getGameObj();
+  const auto gameObj = Game::getGameObj();
   auto game = updateCurrentState();
   gameObj->userAct = Start;
   userInput(gameObj->userAct, false);

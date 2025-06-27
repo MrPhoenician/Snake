@@ -1,4 +1,5 @@
-#include "snake.h"
+#include "Game.h"
+
 using namespace s21;
 
 Game *Game::gameObj = nullptr;
@@ -13,8 +14,8 @@ Game *Game::getGameObj() {
 
 typedef void (Game::*action_t)();
 
-void Game::sigact(int action) {
-  action_t fsm_table[6][9] = {
+void Game::sigact(const int action) {
+  const action_t fsm_table[6][9] = {
       {&Game::spawn, nullptr, &Game::exitstate, nullptr, nullptr, nullptr,
        nullptr, nullptr, &Game::start},
       {nullptr, &Game::pause, &Game::exitstate, nullptr, nullptr, nullptr,
@@ -31,25 +32,23 @@ void Game::sigact(int action) {
       {nullptr, &Game::pause, &Game::exitstate, nullptr, nullptr, nullptr,
        nullptr, nullptr, nullptr}};
 
-  action_t act = fsm_table[state][action];
-
-  if (act) {
+  if (const action_t act = fsm_table[state][action]) {
     (this->*act)();
   }
 }
 
-int Game::checkCollide() {
+int Game::checkCollide() const {
   int error = 0;
   int x = snake.field.back().second;
   int y = snake.field.back().first;
 
-  if (snake.direction == Right) {
+  if (snake.getDirection() == Right) {
     x += 1;
-  } else if (snake.direction == Left) {
+  } else if (snake.getDirection() == Left) {
     x -= 1;
-  } else if (snake.direction == Up) {
+  } else if (snake.getDirection() == Up) {
     y -= 1;
-  } else if (snake.direction == Down) {
+  } else if (snake.getDirection() == Down) {
     y += 1;
   }
 
@@ -67,13 +66,13 @@ int Game::checkCollide() {
 
 long Game::myTimer() {
   end_t = steady_clock::now();
-  auto difference = duration_cast<milliseconds>(end_t - begin_t).count();
+  const auto difference = duration_cast<milliseconds>(end_t - begin_t).count();
 
   return difference;
 }
 
 void userInput(UserAction_t action, [[maybe_unused]] bool hold) {
-  auto game = Game::getGameObj();
+  const auto game = Game::getGameObj();
 
   if (action >= 0 && action < 8) {
     game->sigact(action);
@@ -83,7 +82,7 @@ void userInput(UserAction_t action, [[maybe_unused]] bool hold) {
 }
 
 GameInfo_t updateCurrentState() {
-  auto game = Game::getGameObj();
+  const auto game = Game::getGameObj();
 
   if (game->stats.field == nullptr && game->state != Exit) {
     game->allocateMatr();
@@ -94,7 +93,7 @@ GameInfo_t updateCurrentState() {
 
   if (game->state == Exit) {
     Game::destroyGameObj();
-    GameInfo_t empty = {};
+    constexpr GameInfo_t empty = {};
 
     return empty;
   }
@@ -102,7 +101,7 @@ GameInfo_t updateCurrentState() {
   if (game->state == Moving && game->userAct == Action) {
     if (game->myTimer() > game->maxSpeed) {
       game->state = Shifting;
-      game->userAct = game->snake.direction;
+      game->userAct = game->snake.getDirection();
     }
   } else if (game->state == Moving) {
     if (game->myTimer() > game->speed) {
@@ -120,10 +119,10 @@ GameInfo_t updateCurrentState() {
 }
 
 void Game::shifting() {
-  snake.checkDirection();
+  checkDirection();
 
   if (userAct == Up || userAct == Down || userAct == Right || userAct == Left) {
-    snake.direction = userAct;
+    snake.setDirection(userAct);
   }
 
   if (!checkCollide()) {
@@ -131,7 +130,7 @@ void Game::shifting() {
 
     if ((snake.field.back().first == apple.getCoor().y) &&
         (snake.field.back().second == apple.getCoor().x)) {
-      snake.eating();
+      eating();
     } else {
       stats.field[snake.field[0].first][snake.field[0].second] = 0;
       snake.field.erase(snake.field.begin());
@@ -163,7 +162,7 @@ void Game::pause() {
     state = Pause_state;
     stats.pause = true;
   } else {
-    userAct = snake.direction;
+    userAct = snake.getDirection();
     state = Moving;
     stats.pause = false;
     begin_t = steady_clock::now();
@@ -196,27 +195,30 @@ void Game::start() {
 
 void Game::spawn() {
   if (state != Exit) {
-    stats.field[apple.getCoor().y][apple.getCoor().x] = 1;
-
-    for (auto i : snake.field) {
-      stats.field[i.first][i.second] = 1;
+    for (auto [first, second] : snake.field) {
+      stats.field[first][second] = 1;
     }
+
+    const auto game = getGameObj();
+    int y, x;
+
+    do {
+      std::tie(y, x) = Apple::generateApple();
+    } while (game->getField(y, x) == 1);
+
+    game->apple.setCoor(y, x);
+    game->setField(y, x, 1);
 
     state = Shifting;
     userAct = Right;
-    snake.direction = Right;
+    snake.setDirection(Right);
   }
 }
 
 void Game::allocateMatr() {
   stats.field = new int *[BOARD_N];
   for (int i = 0; i < BOARD_N; i++) {
-    stats.field[i] = new int[BOARD_M];
-  }
-  for (int i = 0; i < BOARD_N; i++) {
-    for (int j = 0; j < BOARD_M; j++) {
-      stats.field[i][j] = 0;
-    }
+    stats.field[i] = new int[BOARD_M]{};
   }
 }
 
@@ -230,23 +232,8 @@ void Game::freeField() {
   }
 }
 
-void Apple::generateApple() {
-  auto game = Game::getGameObj();
-  int y, x;
-  do {
-    srand(time(nullptr));
-    y = rand() % 20;
-    x = rand() % 10;
-  } while (game->getField(y, x) == 1);
-
-  setCoor(y, x);
-  game->setField(y, x, 1);
-}
-
 void Game::readFromFile() {
-  std::ifstream file{"snake.txt"};
-
-  if (!file.is_open()) {
+  if (std::ifstream file{"snake.txt"}; !file.is_open()) {
   } else {
     std::string score;
 
@@ -258,16 +245,14 @@ void Game::readFromFile() {
 }
 
 void Game::writeToFile() const {
-  std::ofstream file{"snake.txt"};
-
-  if (!file) {
+  if (std::ofstream file{"snake.txt"}; !file) {
   } else {
     file << stats.high_score;
     file.close();
   }
 }
 
-void Game::fillField() {
+void Game::fillField() const {
   for (auto &i : snake.field) {
     stats.field[i.first][i.second] = 1;
   }
@@ -278,65 +263,6 @@ void Game::setZero() const {
     for (int j = 0; j < BOARD_M; j++) {
       setField(i, j, 0);
     }
-  }
-}
-
-void Snake::checkDirection() const {
-  auto game = Game::getGameObj();
-  if ((direction == Up && game->userAct == Down) ||
-      (direction == Down && game->userAct == Up)) {
-    game->userAct = direction;
-  } else if ((direction == Right && game->userAct == Left) ||
-             (direction == Left && game->userAct == Right)) {
-    game->userAct = direction;
-  }
-}
-
-void Snake::addSnakeHead() {
-  int x = field.back().second;
-  int y = field.back().first;
-
-  if (direction == Up) {
-    y -= 1;
-  } else if (direction == Right) {
-    x += 1;
-  } else if (direction == Left) {
-    x -= 1;
-  } else if (direction == Down) {
-    y += 1;
-  }
-
-  field.emplace_back(y, x);
-}
-
-void Snake::initSnake() {
-  field.resize(4);
-  field[0] = {10, 3};
-  field[1] = {10, 4};
-  field[2] = {10, 5};
-  field[3] = {10, 6};
-  length = 4;
-}
-
-void Snake::eating() {
-  auto game = Game::getGameObj();
-  length += 1;
-  game->stats.score += 1;
-
-  if (game->stats.score % 5 == 0) {
-    game->setLevelAndSpeed();
-  }
-
-  if (game->stats.score > game->stats.high_score) {
-    game->stats.high_score = game->stats.score;
-    game->writeToFile();
-  }
-
-  if (length == 200) {
-    game->state = Gameover;
-    game->winFlag = true;
-  } else {
-    game->apple.generateApple();
   }
 }
 
@@ -358,6 +284,50 @@ Game::Game() {
 void Game::destroyGameObj() {
   delete gameObj;
   gameObj = nullptr;
+}
+
+void Game::checkDirection() const {
+  const auto game = getGameObj();
+
+  if ((snake.getDirection() == Up && game->userAct == Down) ||
+      (snake.getDirection() == Down && game->userAct == Up) ||
+      (snake.getDirection() == Right && game->userAct == Left) ||
+      (snake.getDirection() == Left && game->userAct == Right)) {
+    game->userAct = snake.getDirection();
+  }
+}
+
+void Game::eating() {
+  const auto game = Game::getGameObj();
+  snake.setLength(snake.getLength() + 1);
+  game->stats.score += 1;
+
+  if (game->stats.score % 5 == 0) {
+    game->setLevelAndSpeed();
+  }
+
+  if (game->stats.score > game->stats.high_score) {
+    game->stats.high_score = game->stats.score;
+    game->writeToFile();
+  }
+
+  if (snake.getLength() == 200) {
+    game->state = Gameover;
+    game->winFlag = true;
+  } else {
+    int y, x;
+    do {
+      std::tie(y, x) = Apple::generateApple();
+    } while (game->getField(y, x) == 1);
+
+    game->apple.setCoor(y, x);
+    game->setField(y, x, 1);
+  }
+}
+
+int Game::getField(const int y, const int x) const { return stats.field[y][x]; }
+void Game::setField(const int y, const int x, const int value) const {
+  stats.field[y][x] = value;
 }
 
 void Game::generateLose() const {

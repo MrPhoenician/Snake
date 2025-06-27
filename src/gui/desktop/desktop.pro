@@ -23,12 +23,16 @@ TARGET = snake_desk
 SOURCES += \
     main.cpp \
     widget.cpp \
-    ../../brick_game/snake/snake.cpp
+    ../../brick_game/snake/Snake.cpp \
+    ../../brick_game/snake/Apple.cpp \
+    ../../brick_game/snake/Game.cpp
 
 HEADERS += \
     widget.h \
     ../../brick_game/api.h \
-    ../../brick_game/snake/snake.h
+    ../../brick_game/snake/Snake.h \
+    ../../brick_game/snake/Apple.h \
+    ../../brick_game/snake/Game.h
 }
 
 # Default rules for deployment.

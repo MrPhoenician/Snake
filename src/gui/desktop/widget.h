@@ -8,6 +8,7 @@
 #include <QWidget>
 
 #include "../../brick_game/api.h"
+
 #define DELAY 20
 #define SIZE_CELL 30
 
