@@ -25,9 +25,9 @@
 
 void print_overlay();
 void print_rectangle(int top_y, int bottom_y, int left_x, int right_x);
-void print_stats(GameInfo_t *game);
-bool print_field(GameInfo_t *game);
-void print_next(GameInfo_t *game);
+void print_stats(const GameInfo_t *game);
+bool print_field(const GameInfo_t *game);
+void print_next(const GameInfo_t *game);
 void print_pause(bool pause);
 void game_loop();
 void get_signal(int userIn, UserAction_t *action);

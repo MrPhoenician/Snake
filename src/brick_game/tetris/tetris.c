@@ -1,9 +1,5 @@
 #include "tetris.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 Game_t *game_ptr() {
   static Game_t game;
 
@@ -145,7 +141,7 @@ void generate_gameover(int **matrix) {
 }
 
 // сохранение фигуры на поле
-void fill_field(Game_t *game) {
+void fill_field(const Game_t *game) {
   for (int i = 0; i < 4; i++) {
     for (int j = 0; j < 4; j++) {
       if (game->current[i][j] == 1) {
@@ -156,7 +152,7 @@ void fill_field(Game_t *game) {
   }
 }
 
-void fill_add_field(Game_t *game) {
+void fill_add_field(const Game_t *game) {
   for (int i = 0; i < 4; i++) {
     for (int j = 0; j < 4; j++) {
       if (game->current[i][j] == 1) {
@@ -167,7 +163,7 @@ void fill_add_field(Game_t *game) {
   }
 }
 
-void merge_fields(Game_t *game) {
+void merge_fields(const Game_t *game) {
   for (int i = 0; i < BOARD_N; i++) {
     for (int j = 0; j < BOARD_M; j++) {
       game->stats.field[i][j] = game->additional_field[i][j + 4];
@@ -176,7 +172,7 @@ void merge_fields(Game_t *game) {
 }
 
 // удаляю снизу вверх и сдвигаю все поле вниз
-int delete_row(Game_t *game) {
+int delete_row(const Game_t *game) {
   int repeat;
   int count = 0;
   for (int i = BOARD_N - 1; i >= 0; i--) {
@@ -220,16 +216,15 @@ int delete_row(Game_t *game) {
   return count;
 }
 
-void init_add_field(Game_t *game) {
+void init_add_field(const Game_t *game) {
   for (int i = 0; i < BOARD_N + 4; i++) {
     for (int j = 0; j < BOARD_M + 8; j++) {
-      if ((j < 4 || j >= 14) && i <= 20)
+      if (((j < 4 || j >= 14) && i <= 20) || i >= 20) {
         game->additional_field[i][j] = 2;
-      else if (i >= 20)
-        game->additional_field[i][j] = 2;
+      }
     }
   }
-};
+}
 
 void free_matrix() {
   Game_t *game = game_ptr();
@@ -265,7 +260,7 @@ void open_and_read() {
 }
 
 void open_and_write() {
-  Game_t *game = game_ptr();
+  const Game_t *game = game_ptr();
   FILE *file = fopen("tetris.txt", "r+");
 
   if (file) {
@@ -334,8 +329,8 @@ GameInfo_t updateCurrentState() {
 typedef void (*action_t)(Game_t *game);  // указатель на функцию
 // using action = void (*)(Game_t *game); // тоже самое
 
-void sigact(int action) {
-  action_t fsm_table[8][9] = {
+void sigact(const int action) {
+  const action_t fsm_table[8][9] = {
       {spawn, NULL, exitstate, NULL, NULL, NULL, NULL, NULL, start},
       {NULL, NULL, spawn, spawn, spawn, spawn, spawn, spawn, spawn},
       {NULL, pause, exitstate, moveleft, moveright, moveup, movedown, rotation,
@@ -352,13 +347,13 @@ void sigact(int action) {
 
   Game_t *game = game_ptr();
 
-  action_t act =
+  const action_t act =
       fsm_table[game->state][action];  // текущий алгоритм выполнения КА
 
-  if (act) act((Game_t *)game);  // act это колбэк на любую функцию
+  if (act) act(game);  // act это колбэк на любую функцию
 }
 
-void userInput(UserAction_t action, bool hold) {
+void userInput(const UserAction_t action, const bool hold) {
   Game_t *game = game_ptr();
   (void)hold;
 
@@ -369,7 +364,7 @@ void userInput(UserAction_t action, bool hold) {
 }
 
 int reach() {
-  Game_t *game = game_ptr();
+  const Game_t *game = game_ptr();
   int flag = 0;
   for (int i = 0; i < 1; i++) {
     for (int j = 0; j < BOARD_M + 8; j++) {
@@ -380,7 +375,7 @@ int reach() {
 }
 
 int check_collide() {
-  Game_t *game = game_ptr();
+  const Game_t *game = game_ptr();
   int flag = 0;
 
   for (int i = 0; i < 4; i++) {
@@ -415,7 +410,7 @@ void rotation() {
     }
     for (int i = 0; i < row / 2; ++i) {
       for (int j = i; j < row - i - 1; ++j) {
-        int temp = game->current[i][j];
+        const int temp = game->current[i][j];
         game->current[i][j] = game->current[size_mat - j - 1][i];
         game->current[size_mat - j - 1][i] =
             game->current[size_mat - i - 1][size_mat - j - 1];
@@ -439,7 +434,7 @@ void attaching() {
   Game_t *game = game_ptr();
   fill_add_field(game);
   fill_field(game);
-  int count = delete_row(game);
+  const int count = delete_row(game);
 
   if (count == 1)
     game->stats.score += 100;

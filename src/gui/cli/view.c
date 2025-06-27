@@ -41,7 +41,7 @@ void game_loop() {
 }
 
 // получение сигналов от пользователя
-void get_signal(int userIn, UserAction_t *action) {
+void get_signal(const int userIn, UserAction_t *action) {
   if (userIn == UP)
     *action = Up;
   else if (userIn == DOWN)
@@ -78,7 +78,8 @@ void print_overlay() {
   MVPRINTW(12, (BOARD_M * 2) + 7, "SPEED");
 }
 
-void print_rectangle(int top_y, int bottom_y, int left_x, int right_x) {
+void print_rectangle(const int top_y, const int bottom_y, const int left_x,
+                     const int right_x) {
   MVADDCH(top_y, left_x, ACS_ULCORNER);
 
   int i = left_x + 1;
@@ -97,7 +98,7 @@ void print_rectangle(int top_y, int bottom_y, int left_x, int right_x) {
   MVADDCH(bottom_y, i, ACS_LRCORNER);
 }
 
-void print_stats(GameInfo_t *game) {
+void print_stats(const GameInfo_t *game) {
   MVPRINTW(2, BOARD_M * 2 + 13, "    ");
   MVPRINTW(2, BOARD_M * 2 + 13, "%d", game->level);
   MVPRINTW(5, BOARD_M * 2 + 13, "    ");
@@ -108,7 +109,7 @@ void print_stats(GameInfo_t *game) {
   MVPRINTW(12, BOARD_M * 2 + 13, "%d", game->speed);
 }
 
-bool print_field(GameInfo_t *game) {
+bool print_field(const GameInfo_t *game) {
   bool error = EXIT_SUCCESS;
   if (game->field != NULL) {
     for (int i = 0; i < BOARD_N; i++) {
@@ -124,7 +125,7 @@ bool print_field(GameInfo_t *game) {
   return error;
 }
 
-void print_next(GameInfo_t *game) {
+void print_next(const GameInfo_t *game) {
   if (game->next != NULL) {
     for (int i = 0; i < 2; i++) {
       for (int j = 0; j < 4; j++) {
@@ -137,7 +138,7 @@ void print_next(GameInfo_t *game) {
   }
 }
 
-void print_pause(bool pause) {
+void print_pause(const bool pause) {
   if (pause) {
     MVPRINTW(19, 29, "PAUSE");
   } else

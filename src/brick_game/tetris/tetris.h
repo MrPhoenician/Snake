@@ -6,6 +6,7 @@
 #include <curses.h>
 #include <ncurses.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include <sys/time.h>
 #include <time.h>
 
@@ -56,14 +57,14 @@ int allocate_game();
 void free_matrix();
 int check_allocate(int error);
 void generate_fig(int **matrix, int *fig_type);
-void fill_field(Game_t *game);
+void fill_field(const Game_t *game);
 void initialize_structs(Game_t *game);
 void sigact(int action);
 Game_t *game_ptr();
-void init_add_field(Game_t *game);
+void init_add_field(const Game_t *game);
 int check_collide();
-void merge_fields(Game_t *game);
-int delete_row(Game_t *game);
+void merge_fields(const Game_t *game);
+int delete_row(const Game_t *game);
 void timer();
 void open_and_read();
 void open_and_write();
