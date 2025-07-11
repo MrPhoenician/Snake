@@ -3,6 +3,7 @@
 
 #include <chrono>
 #include <fstream>
+#include <memory>
 
 #include "../api.h"
 #include "Apple.h"

@@ -216,14 +216,28 @@ void Game::spawn() {
 }
 
 void Game::allocateMatr() {
-  stats.field = new int *[BOARD_N];
+  int **rawField = new int *[BOARD_N];
+
+  auto deleter = [](int **field) {
+    if (field) {
+      for (int i = 0; i < BOARD_N; i++) {
+        delete field[i];
+      }
+      delete[] field;
+    }
+  };
+
+  std::unique_ptr<int *[], decltype(deleter)> guard(rawField, deleter);
+
   for (int i = 0; i < BOARD_N; i++) {
-    stats.field[i] = new int[BOARD_M]{};
+    rawField[i] = new int[BOARD_M]();
   }
+
+  stats.field = guard.release();
 }
 
 void Game::freeField() {
-  if (stats.field != nullptr) {
+  if (stats.field) {
     for (int i = 0; i < BOARD_N; i++) {
       delete[] stats.field[i];
     }
