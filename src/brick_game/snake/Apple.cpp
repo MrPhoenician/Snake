@@ -2,7 +2,7 @@
 
 using namespace s21;
 
-[[nodiscard]] Coordinate Apple::getCoor() const { return coor; }
+[[nodiscard]] Apple::Coordinate Apple::getCoor() const { return coor; }
 
 void Apple::setCoor(const int y, const int x) {
   coor.y = y;

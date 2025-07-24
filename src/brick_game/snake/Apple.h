@@ -5,13 +5,13 @@
 
 namespace s21 {
 
-typedef struct {
-  int x;
-  int y;
-} Coordinate;
-
 class Apple {
  public:
+  typedef struct {
+    int x;
+    int y;
+  } Coordinate;
+
   Apple() = default;
   [[nodiscard]] Coordinate getCoor() const;
   void setCoor(int y, int x);

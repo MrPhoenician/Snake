@@ -61,8 +61,8 @@ dvi: readme.tex
 	# sudo apt-get install texlive-lang-cyrillic
 	# sudo apt-get install cm-super
 	latexmk -output-directory=dvi/ readme.tex
-	# xelatex -output-directory=dvi/ readme.tex
-	# latexmk -output-directory=dvi/ -pdf readme.tex
+	#xelatex -output-directory=dvi/ readme.tex
+	#latexmk -output-directory=dvi/ -pdf readme.tex
 
 dist:
 	@mkdir -p $(BINDIR) $(DOCDIR)
